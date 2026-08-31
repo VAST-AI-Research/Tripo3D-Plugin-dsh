@@ -35,7 +35,7 @@ CHANGELOG.md                版本记录
 
 ```bash
 node scripts/validate.mjs                # 62 项检查
-cd plugin && npm pack --pack-destination ../dist   # 产出 dsh-plugin-tripo-3d-<version>.tgz
+cd plugin && npm pack --pack-destination ../dist   # 产出 dsh-tripo-3d-<version>.tgz
 ```
 
 ## 本地测试
@@ -44,7 +44,7 @@ cd plugin && npm pack --pack-destination ../dist   # 产出 dsh-plugin-tripo-3d-
 # 装进 web profile（首次使用自动初始化为 base + web-app；目录 / tarball / npm 包名均可）
 npx @deepseek-ai/dsh plugin --profile web add /绝对路径/Tripo-Api-Plugin-Deepseek/plugin
 
-# 不启动即可确认层已生效（应出现 "# == dsh-plugin-tripo-3d" 层）
+# 不启动即可确认层已生效（应出现 "# == dsh-tripo-3d" 层）
 npx @deepseek-ai/dsh --profile web --dump-config
 
 # 启动 Web UI（dsh web 是 --profile web 的硬编码别名），输入 / 应能看到两个 skill
@@ -60,8 +60,8 @@ npx @deepseek-ai/dsh web
 
 DSH 无应用商店，三种等效渠道（详见官方 publish 文档）：
 
-1. **npm 发布**：`cd plugin && npm publish`，用户 `dsh plugin add dsh-plugin-tripo-3d`
-2. **tarball**：分发 `npm pack` 产物，用户 `dsh plugin add ./dsh-plugin-tripo-3d-0.1.0.tgz`
+1. **npm 发布**：`cd plugin && npm publish`，用户 `dsh plugin add dsh-tripo-3d`
+2. **tarball**：分发 `npm pack` 产物，用户 `dsh plugin add ./dsh-tripo-3d-0.1.0.tgz`
 3. **GitHub**：用户 `dsh plugin add github:<org>/<repo>#<sha>`（本包无构建脚本，
    不触发 pnpm 的构建许可拦截）
 

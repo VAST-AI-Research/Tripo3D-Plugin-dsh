@@ -1,5 +1,5 @@
 /**
- * dsh-plugin-tripo-3d — Tripo 3D packaged-skill provider for DeepSeek Harness.
+ * dsh-tripo-3d — Tripo 3D packaged-skill provider for DeepSeek Harness.
  *
  * Registers the bundled `tripo-3d` and `tripo-game-asset` skills on the global
  * `ctx.skills` registry, following the `@deepseek-ai/dsh-skill-badge` pattern.

@@ -1,8 +1,8 @@
-# dsh-plugin-tripo-3d 的 bundle 层：插入一个 host 行。该插件向全局 skills
+# dsh-tripo-3d 的 bundle 层：插入一个 host 行。该插件向全局 skills
 # 注册表注册打包 skill（tripo-3d、tripo-game-asset），对所有 agent preset 可见。
 #
 # 行引用包名（而非相对路径），Node 解析会在 profile 的 node_modules 里找到
 # 已安装的代码。用户可在 profile 自己的 cordis.patch.yml 里按 id 覆盖或禁用。
 - insert:
     - id: tripo-3d
-      name: dsh-plugin-tripo-3d
+      name: dsh-tripo-3d

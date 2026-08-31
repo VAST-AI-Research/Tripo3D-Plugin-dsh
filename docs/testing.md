@@ -23,7 +23,7 @@ npx @deepseek-ai/dsh plugin --profile web add /绝对路径/Tripo-Api-Plugin-Dee
 
 # 3. 不启动即可确认组合层
 npx @deepseek-ai/dsh --profile web --dump-config
-#    预期：出现 "# == dsh-plugin-tripo-3d" 层，含 id: tripo-3d 的 insert 行
+#    预期：出现 "# == dsh-tripo-3d" 层，含 id: tripo-3d 的 insert 行
 
 # 4. 启动 Web UI（dsh web 是 --profile web 的硬编码别名；
 #    注意 --profile/--patch 等启动器 flag 不能与 web 子命令混用）
@@ -41,7 +41,7 @@ npx @deepseek-ai/dsh web
 catalog 可能有缓存延迟，新会话必然生效）；改 `cordis.patch.yml` /
 `package.json` / `index.js` 后重启 dsh 进程。
 
-卸载：`npx @deepseek-ai/dsh plugin --profile web remove dsh-plugin-tripo-3d`。
+卸载：`npx @deepseek-ai/dsh plugin --profile web remove dsh-tripo-3d`。
 
 不依赖 Web UI 的运行时自检（不花积分）：写一个 `inject: ['skills']` 的一次性
 探针插件调用 `ctx.skills.list({})` 打印目录，用 `--patch` overlay 随任意

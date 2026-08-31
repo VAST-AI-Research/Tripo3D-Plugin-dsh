@@ -85,7 +85,7 @@ cd plugin && npm pack --pack-destination ../dist
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add <本仓库>/plugin
-npx @deepseek-ai/dsh --profile web --dump-config    # 应出现 dsh-plugin-tripo-3d 层
+npx @deepseek-ai/dsh --profile web --dump-config    # 应出现 dsh-tripo-3d 层
 npx @deepseek-ai/dsh web                             # web 是 --profile web 的硬编码别名
 ```
 

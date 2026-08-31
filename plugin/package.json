@@ -1,5 +1,5 @@
 {
-  "name": "dsh-plugin-tripo-3d",
+  "name": "dsh-tripo-3d",
   "version": "0.1.0",
   "description": "Tripo 3D skills for DeepSeek Harness — generate engine-ready 3D assets from a text prompt or a reference image via tripo-cli, with texturing, rigging, retopology and format conversion in one pass.",
   "keywords": [
@@ -18,6 +18,12 @@
   ],
   "author": "VAST",
   "homepage": "https://www.tripo3d.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vast-enterprise/Tripo-Api-Plugin-Deepseek.git",
+    "directory": "plugin"
+  },
+  "bugs": "https://github.com/vast-enterprise/Tripo-Api-Plugin-Deepseek/issues",
   "license": "MIT",
   "type": "module",
   "main": "index.js",
