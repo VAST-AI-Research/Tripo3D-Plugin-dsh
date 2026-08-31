@@ -1,0 +1,34 @@
+{
+  "name": "dsh-plugin-tripo-3d",
+  "version": "0.1.0",
+  "description": "Tripo 3D skills for DeepSeek Harness — generate engine-ready 3D assets from a text prompt or a reference image via tripo-cli, with texturing, rigging, retopology and format conversion in one pass.",
+  "keywords": [
+    "dsh-plugin",
+    "dsh",
+    "deepseek-harness",
+    "3d",
+    "asset-generation",
+    "game-development",
+    "text-to-3d",
+    "image-to-3d",
+    "3d-printing",
+    "rigging",
+    "glb",
+    "fbx"
+  ],
+  "author": "VAST",
+  "homepage": "https://www.tripo3d.ai",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "skills"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
