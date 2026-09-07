@@ -52,6 +52,9 @@ check(pkg.main === 'index.js', 'main 指向 index.js');
 check(existsSync(join(PLUGIN, 'index.js')), 'index.js 存在');
 check((pkg.keywords ?? []).includes('dsh-plugin'), 'keywords 含 "dsh-plugin"（生态发现约定）');
 check(pkg.license === 'MIT', 'license 是 MIT');
+if ((pkg.name ?? '').startsWith('@')) {
+  check(pkg.publishConfig?.access === 'public', 'scoped 包声明 publishConfig.access = public（否则 npm publish 默认私有并失败）');
+}
 
 const patchRel = pkg.dsh?.bundle?.patch;
 check(typeof patchRel === 'string' && patchRel.length > 0, 'dsh.bundle.patch 已声明（缺失则只作为普通依赖安装，不激活层）');

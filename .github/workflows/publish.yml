@@ -1,0 +1,46 @@
+# 发布 plugin/ 到 npm（@vastai/dsh-tripo-3d），走 npm trusted publishing（OIDC）：
+# 无需 NPM_TOKEN，npm 会自动附带 provenance 证明。
+#
+# 前置（一次性）：包首次发布须由 @vastai 组织成员本机 npm publish；之后在
+# npmjs.com 包页面 Settings → Trusted Publisher 绑定本仓库与本文件名 publish.yml。
+#
+# 触发：推送 v<version> tag，且 <version> 必须等于 plugin/package.json 的 version。
+name: Publish to npm
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      # trusted publishing 需要 npm >= 11.5.1
+      - run: npm install -g npm@^11.5.1 && npm --version
+
+      - name: Validate plugin
+        run: node scripts/validate.mjs
+
+      - name: Check tag matches package.json version
+        run: |
+          pkg_version=$(node -p "require('./plugin/package.json').version")
+          tag_version="${GITHUB_REF_NAME#v}"
+          if [ "$pkg_version" != "$tag_version" ]; then
+            echo "tag v$tag_version does not match plugin/package.json version $pkg_version" >&2
+            exit 1
+          fi
+
+      - name: Publish
+        working-directory: plugin
+        run: npm publish

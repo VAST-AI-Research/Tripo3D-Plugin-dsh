@@ -35,8 +35,8 @@ scripts/validate.mjs        发布前校验
 ## 校验与打包
 
 ```bash
-node scripts/validate.mjs                # 62 项检查
-cd plugin && npm pack --pack-destination ../dist   # 产出 dsh-tripo-3d-<version>.tgz
+node scripts/validate.mjs                # 63 项检查
+cd plugin && npm pack --pack-destination ../dist   # 产出 vastai-dsh-tripo-3d-<version>.tgz
 ```
 
 ## 本地测试
@@ -46,7 +46,7 @@ cd plugin && npm pack --pack-destination ../dist   # 产出 dsh-tripo-3d-<versio
 git clone https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh.git
 npx @deepseek-ai/dsh plugin --profile web add /绝对路径/Tripo3D-Plugin-dsh/plugin
 
-# 不启动即可确认层已生效（应出现 "# == dsh-tripo-3d" 层）
+# 不启动即可确认层已生效（应出现 "# == @vastai/dsh-tripo-3d" 层）
 npx @deepseek-ai/dsh --profile web --dump-config
 
 # 启动 Web UI（dsh web 是 --profile web 的硬编码别名），输入 / 应能看到两个 skill
@@ -62,15 +62,43 @@ npx @deepseek-ai/dsh web
 
 DSH 无应用商店，三种等效渠道（详见官方 publish 文档）：
 
-1. **npm 发布**：`cd plugin && npm publish`，用户 `dsh plugin add dsh-tripo-3d`
-2. **tarball**：分发 `npm pack` 产物，用户 `dsh plugin add ./dsh-tripo-3d-0.1.0.tgz`
-3. **GitHub**：从本仓库
-   [VAST-AI-Research/Tripo3D-Plugin-dsh](https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh)
-   安装（本包无构建脚本，不触发 pnpm 的构建许可拦截）。注意 npm 包位于 `plugin/`
-   子目录而非仓库根，git 源需指向该子目录；最简单的方式是 clone 后按上文用本地
-   目录安装
+1. **npm**：用户 `dsh plugin --profile web add @vastai/dsh-tripo-3d`
+2. **GitHub**：用户
+   `dsh plugin --profile web add "github:VAST-AI-Research/Tripo3D-Plugin-dsh#path:/plugin"`
+   （npm 包位于 `plugin/` 子目录，`path:` 是 pnpm 的子目录语法；本包无构建脚本，
+   不触发 pnpm 的构建许可拦截）
+3. **tarball**：分发 `npm pack` 产物，用户 `dsh plugin add ./vastai-dsh-tripo-3d-<version>.tgz`
 
-本仓库已作为公开插件仓库对 DSH 用户开放；加 `dsh-plugin` GitHub topic 以便社区发现。
+本仓库已作为公开插件仓库对 DSH 用户开放，并带 `dsh-plugin` GitHub topic 以便社区发现。
+
+## 发布到 npm
+
+包名在 `@vastai` scope 下，由组织成员发布。发布分两个阶段：
+
+**首次发布（手动，一次性）。** npm 的 trusted publishing 只能绑定到已存在的包，
+所以 0.1.0 必须由 `@vastai` 组织成员在本机发一次：
+
+```bash
+node scripts/validate.mjs
+cd plugin
+npm login                 # @vastai 组织成员账号
+npm publish               # publishConfig.access 已设为 public，2FA 会要求 OTP
+npm owner add <第二位维护者> @vastai/dsh-tripo-3d   # 至少两人持有
+```
+
+**之后的版本（GitHub Actions，无 token）。** 首发完成后，在
+npmjs.com → 包页面 → Settings → Trusted Publisher 选 GitHub Actions，填：
+Organization `VAST-AI-Research`、Repository `Tripo3D-Plugin-dsh`、
+Workflow filename `publish.yml`、Environment 留空。此后发版流程是：
+
+```bash
+# 1. bump plugin/package.json 的 version（如 0.1.1）并提交
+# 2. 打同名 tag 并推送，workflow 自动校验并发布，附带 provenance 证明
+git tag v0.1.1 && git push origin v0.1.1
+```
+
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml) 会先跑 `validate.mjs`、
+核对 tag 与 `package.json` 版本一致，再 `npm publish`。
 
 ## License
 
