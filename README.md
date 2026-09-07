@@ -5,6 +5,10 @@ Tripo 的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) �
 [`tripo-cli`](https://github.com/vast-enterprise/Tripo-API-CLI)，生成的 3D 资产
 直接落到用户本地项目。
 
+本仓库（[VAST-AI-Research/Tripo3D-Plugin-dsh](https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh)）
+是面向 DSH 用户公开的插件仓库：`plugin/` 是可直接安装的 npm 包，问题与建议请提
+[Issue](https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh/issues)。
+
 插件以 DSH **bundle**（npm 包）形态分发：`package.json` 声明 `dsh.bundle.patch`，
 patch 插入一个 host 行，该行的插件模块向全局 `ctx.skills` 注册表注册两个打包
 skill（对所有 agent preset 可见，模式同官方 `@deepseek-ai/dsh-skill-badge`）。
@@ -42,7 +46,8 @@ cd plugin && npm pack --pack-destination ../dist   # 产出 dsh-tripo-3d-<versio
 
 ```bash
 # 装进 web profile（首次使用自动初始化为 base + web-app；目录 / tarball / npm 包名均可）
-npx @deepseek-ai/dsh plugin --profile web add /绝对路径/Tripo-Api-Plugin-Deepseek/plugin
+git clone https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh.git
+npx @deepseek-ai/dsh plugin --profile web add /绝对路径/Tripo3D-Plugin-dsh/plugin
 
 # 不启动即可确认层已生效（应出现 "# == dsh-tripo-3d" 层）
 npx @deepseek-ai/dsh --profile web --dump-config
@@ -62,10 +67,13 @@ DSH 无应用商店，三种等效渠道（详见官方 publish 文档）：
 
 1. **npm 发布**：`cd plugin && npm publish`，用户 `dsh plugin add dsh-tripo-3d`
 2. **tarball**：分发 `npm pack` 产物，用户 `dsh plugin add ./dsh-tripo-3d-0.1.0.tgz`
-3. **GitHub**：用户 `dsh plugin add github:<org>/<repo>#<sha>`（本包无构建脚本，
-   不触发 pnpm 的构建许可拦截）
+3. **GitHub**：从本仓库
+   [VAST-AI-Research/Tripo3D-Plugin-dsh](https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh)
+   安装（本包无构建脚本，不触发 pnpm 的构建许可拦截）。注意 npm 包位于 `plugin/`
+   子目录而非仓库根，git 源需指向该子目录；最简单的方式是 clone 后按上文用本地
+   目录安装
 
-仓库加 `dsh-plugin` GitHub topic 以便社区发现。
+本仓库已作为公开插件仓库对 DSH 用户开放；加 `dsh-plugin` GitHub topic 以便社区发现。
 
 ## License
 
