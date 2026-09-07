@@ -45,6 +45,12 @@ Try prompts like:
 dsh plugin --profile web remove dsh-tripo-3d
 ```
 
+## Source & feedback
+
+Source code and issue tracker:
+[VAST-AI-Research/Tripo3D-Plugin-dsh](https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh)
+(the package lives in the `plugin/` directory).
+
 ## License
 
 MIT © VAST

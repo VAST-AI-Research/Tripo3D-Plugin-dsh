@@ -20,10 +20,10 @@
   "homepage": "https://www.tripo3d.ai",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vast-enterprise/Tripo-Api-Plugin-Deepseek.git",
+    "url": "git+https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh.git",
     "directory": "plugin"
   },
-  "bugs": "https://github.com/vast-enterprise/Tripo-Api-Plugin-Deepseek/issues",
+  "bugs": "https://github.com/VAST-AI-Research/Tripo3D-Plugin-dsh/issues",
   "license": "MIT",
   "type": "module",
   "main": "index.js",

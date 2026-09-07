@@ -30,9 +30,6 @@ plugin/                     分发物——npm 包（bundle）
     └── tripo-game-asset/   游戏资产配方：道具、LOD、绑骨角色
 
 scripts/validate.mjs        发布前校验
-docs/testing.md             本地安装与端到端测试 runbook
-AGENTS.md                   给 AI agent 的工作上下文与硬约束
-CHANGELOG.md                版本记录
 ```
 
 ## 校验与打包
@@ -59,7 +56,7 @@ npx @deepseek-ai/dsh web
 注意 flag 顺序：`--profile` / `--patch` 是启动器 flag，必须在 `web` 等应用参数
 之前；`dsh --profile <自定义名> web` 会被拒绝。
 
-跑正向用例需要真实账号且消耗积分，完整步骤见 [`docs/testing.md`](docs/testing.md)。
+跑正向用例需要真实 Tripo 账号且消耗积分。
 
 ## 分发
 
