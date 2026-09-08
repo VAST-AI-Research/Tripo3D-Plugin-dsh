@@ -362,8 +362,8 @@ git tag v0.1.1 && git push origin v0.1.1
 
 ## 相关
 
-- [`tripo-cli`](https://github.com/vast-enterprise/Tripo-API-CLI) — skill 驱动的
-  CLI，命令契约的权威来源（`skill/commands/*.md` 是每个 flag 的参考）
+- [`tripo-cli`](https://www.npmjs.com/package/tripo-cli) — skill 驱动的 CLI，
+  命令契约的权威来源；`tripo docs --topic commands/make` 可查看每个 flag 的参考
 - [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) —
   `docs/user/develop/basic/publish.md`（bundle / profile / 层顺序）、
   `docs/subsystems/skills.md`（provider 契约、rank、catalog 行为）、

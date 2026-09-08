@@ -34,7 +34,7 @@ The bundle registers two skills on the global skill registry:
 - **tripo-game-asset** — game pipeline recipes: low-poly props on a face
   budget, LOD chains, rigged characters with locomotion clips.
 
-The skills drive the [`tripo-cli`](https://github.com/vast-enterprise/Tripo-API-CLI)
+The skills drive the [`tripo-cli`](https://www.npmjs.com/package/tripo-cli)
 through the agent's shell tool (`npx tripo-cli@latest`, no preinstall needed).
 The agent guides you through a one-time device login; API keys are stored by
 the CLI, never pasted into chat.
