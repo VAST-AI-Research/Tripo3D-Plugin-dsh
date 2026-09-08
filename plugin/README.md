@@ -1,4 +1,4 @@
-# @vastai/dsh-tripo-3d
+# tripo-dsh
 
 [Tripo](https://www.tripo3d.ai) 3D generation skills for
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh).
@@ -15,7 +15,7 @@ USDZ/3MF for games, film, AR and 3D printing. Works with both Tripo regions
 ## Install
 
 ```bash
-dsh plugin --profile web add @vastai/dsh-tripo-3d
+dsh plugin --profile web add tripo-dsh
 dsh web
 ```
 
@@ -48,7 +48,7 @@ Try prompts like:
 ## Uninstall
 
 ```bash
-dsh plugin --profile web remove @vastai/dsh-tripo-3d
+dsh plugin --profile web remove tripo-dsh
 ```
 
 ## Source & feedback

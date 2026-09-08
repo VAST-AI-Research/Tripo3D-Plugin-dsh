@@ -4,7 +4,7 @@
 DeepSeek Harness 的 agent，agent 通过 shell 驱动 `tripo-cli`，生成的模型直接落到
 用户本地项目。**
 
-npm `@vastai/dsh-tripo-3d` · 零依赖 · 纯 ESM · 无构建步骤 · 双区域（国内站 / 海外站）
+npm `tripo-dsh` · 零依赖 · 纯 ESM · 无构建步骤 · 双区域（国内站 / 海外站）
 
 ```
   用户                DeepSeek Harness (dsh)                    本插件                 Tripo
@@ -79,7 +79,7 @@ plugin/package.json
 plugin/cordis.patch.yml
   - insert:
       - id: tripo-3d                                          ← 用户可按 id 覆盖 / 禁用
-        name: '@vastai/dsh-tripo-3d'                          ← 按包名解析，落到 index.js
+        name: 'tripo-dsh'                          ← 按包名解析，落到 index.js
         │
         ▼
 plugin/index.js
@@ -89,14 +89,14 @@ plugin/index.js
   }
 ```
 
-`dsh plugin --profile <名> add @vastai/dsh-tripo-3d` 做的事：pnpm 把包装进
+`dsh plugin --profile <名> add tripo-dsh` 做的事：pnpm 把包装进
 `$DSH_HOME/profiles/<名>/`，dsh 发现 manifest 里有 `dsh.bundle`，把包名追加到
 `dsh.profile.bundles`。之后每次 boot，配置按这个顺序叠加：
 
 ```
 1. @deepseek-ai/dsh-base            官方基础层
 2. @deepseek-ai/dsh-web-app         （web profile 才有）
-3. @vastai/dsh-tripo-3d             ← 本插件，insert 一行
+3. tripo-dsh             ← 本插件，insert 一行
 4. profile 自己的 cordis.patch.yml  用户覆盖
 5. $DSH_HOME/cordis.patch.yml       机器级覆盖
 6. --patch <file> ...               命令行 overlay
@@ -277,17 +277,15 @@ DeepSeek 用户以大陆为主，因此双区域是本插件的硬要求，体�
 | 正文不含本机路径、不含其他 agent 产品的表面残留             | skill 文本移植自姊妹项目，公开仓库不带内部痕迹                                                                                                      |
 | `tripo-3d` 同时出现两个区域的控制台地址                     | 双区域硬要求                                                                                                                                       |
 | patch 行只有 `id` + `name`                                  | 本插件无 Config schema；用户禁用靠同 `id` 覆盖                                                                                                      |
-| scoped 包名须带 `publishConfig.access: public`              | 否则 `npm publish` 默认发私有包并失败                                                                                                              |
-
 `validate.mjs` 除静态检查外，还真实 `import` `plugin/index.js`，用假 `ctx` 走一遍
 `registerProvider → list() → get()`，断言候选形状（rank、source、invocation、
-resourceBase）与正文已剥离 frontmatter。共 63 项。
+resourceBase）与正文已剥离 frontmatter。共 62 项。
 
 ## 仓库结构
 
 ```
 Tripo3D-Plugin-dsh/
-├── plugin/                        ← npm 包 @vastai/dsh-tripo-3d（唯一的分发物）
+├── plugin/                        ← npm 包 tripo-dsh（唯一的分发物）
 │   ├── package.json               dsh.bundle manifest；files 白名单
 │   ├── cordis.patch.yml           bundle 层：insert 一行 → index.js
 │   ├── index.js                   SkillProvider：读 SKILL.md，注册到 ctx.skills
@@ -295,7 +293,7 @@ Tripo3D-Plugin-dsh/
 │   └── skills/
 │       ├── tripo-3d/SKILL.md      基础 skill
 │       └── tripo-game-asset/SKILL.md  游戏资产配方
-├── scripts/validate.mjs           63 项校验（静态 + provider 行为）
+├── scripts/validate.mjs           62 项校验（静态 + provider 行为）
 ├── .github/workflows/publish.yml  推 v* tag → 校验 → npm publish（OIDC）
 └── README.md                      本文件
 ```
@@ -306,7 +304,7 @@ Tripo3D-Plugin-dsh/
 
 ```bash
 # 从 npm（发布后）
-dsh plugin --profile web add @vastai/dsh-tripo-3d
+dsh plugin --profile web add tripo-dsh
 
 # 从 GitHub（包在 plugin/ 子目录，用 pnpm 的 path: 语法；无构建脚本，不触发许可拦截）
 dsh plugin --profile web add "github:VAST-AI-Research/Tripo3D-Plugin-dsh#path:/plugin"
@@ -319,7 +317,7 @@ dsh plugin --profile web add /path/to/Tripo3D-Plugin-dsh/plugin
 
 ```bash
 # 1. 配置层已叠加（不 boot）
-dsh --profile web --dump-config          # 应出现 "# == @vastai/dsh-tripo-3d" 层
+dsh --profile web --dump-config          # 应出现 "# == tripo-dsh" 层
 
 # 2. skill 已进目录
 dsh web                                  # 输入框打 /，应看到 tripo-3d 与 tripo-game-asset
@@ -335,21 +333,14 @@ flag 顺序：`--profile` / `--patch` 是启动器 flag，必须在 `web` 等应
 
 ## 发布
 
-包在 `@vastai` scope 下，由组织成员发布。
-
-**首发（一次性，手动）。** npm trusted publishing 只能绑定已存在的包：
-
-```bash
-node scripts/validate.mjs
-cd plugin && npm login && npm publish
-npm owner add <第二位维护者> @vastai/dsh-tripo-3d
-```
-
-之后在 npmjs.com → 包 → Settings → Trusted Publisher 绑定 GitHub Actions：
+npm 包 [`tripo-dsh`](https://www.npmjs.com/package/tripo-dsh)，0.1.0 已由维护者
+手动首发。后续版本走 GitHub Actions trusted publishing，前提是维护者在
+npmjs.com → 包 → Settings → Trusted Publisher 绑定过 GitHub Actions：
 Organization `VAST-AI-Research`、Repository `Tripo3D-Plugin-dsh`、
-Workflow `publish.yml`、Environment 留空。
+Workflow `publish.yml`、Environment 留空。包应至少由两人持有
+（`npm owner add <账号> tripo-dsh`）。
 
-**后续版本（自动，无 token）。** bump `plugin/package.json` 的 `version`，提交，
+**发版流程（无 token）。** bump `plugin/package.json` 的 `version`，提交，
 推同名 tag：
 
 ```bash
