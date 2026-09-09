@@ -94,7 +94,9 @@ tripo make @last --then convert:fbx --json --yes     # continue from the last ta
 ```
 
 Input type is auto-detected: quoted text, an image path or URL, 2-4 images, a model
-file, or a task reference (`@last`, `@name`, a task id).
+file (GLB/GLTF/FBX/OBJ/STL ≤150 MB — a `.gltf` references external files, so it only
+works as a URL; pass a `.glb` for local files), or a task reference (`@last`, `@name`,
+a task id).
 
 A local image file is uploaded by the CLI itself — always reliable. An image
 URL is passed straight to the API and **fetched by Tripo's servers**, so when
@@ -125,6 +127,12 @@ path instead.
 - `-p key=value` passes an API parameter, repeatable. Useful ones: `face_limit=15000`,
   `texture=false pbr=false` (bare geometry, skips texture credits), `auto_size=true`,
   `texture_quality=detailed`, `negative_prompt=...`.
+- `--model <m>` forces the generation model: `tripo-v3.1` (high fidelity, default),
+  `tripo-p1` (low-poly, `face_limit` 50-20000, no `quad`) or `tripo-p2` (P-series
+  preview: adds `quad`, `face_limit` 48-50000 tri / 48-25000 quad; the CLI never
+  auto-selects it and it costs ~100+ credits per generation versus 30-50 for P1).
+  Illegal P-series parameters (`smart_low_poly`, `generate_parts`,
+  `geometry_quality`, and `quad` on P1) are stripped locally with a warning.
 
 ## Rules that matter
 
@@ -144,11 +152,17 @@ path instead.
 4. **Judge the result before moving on.** The result JSON gives `model_file` and
    `preview`. Read `preview.png` to check the asset actually matches the request; if
    it does not, `tripo redo` re-rolls with a new seed.
-5. **Never invent parameters.** Run `tripo docs --topic commands/make` for the full
-   flag list, or `tripo docs --topic common-errors` for the error table.
+5. **Never invent parameters.** The full parameter / model / preset reference from
+   the official API docs ships inside the CLI: `tripo docs --topic commands/make`
+   for the flag list, `tripo docs --topic commands/generate` (3D + image
+   generation parameters), `tripo docs --topic commands/process` (texture /
+   convert / rig / retarget / mesh steps), `tripo docs --topic common-errors` for
+   the error table. Read those instead of sending the user to the website.
 6. **Let the CLI choose the model version.** It selects `tripo-v3.1` (high fidelity)
-   or `tripo-p1` (low-poly, face budget 50-20000) automatically. Only pass `--model`
-   when the user explicitly asks for one.
+   or `tripo-p1` (low-poly, face budget 50-20000) automatically — any
+   `face_limit` ≤ 20000 or a "low poly" prompt flips to P1. Only pass `--model`
+   when the user explicitly asks for one (`tripo-p2` for quad low-poly,
+   `tripo-v3.0` / `tripo-v2.5` to reproduce old projects) or the rule picks wrong.
 
 ## Spending the user's credits
 
@@ -157,7 +171,13 @@ reported on each result.
 
 - Confirm the request before generating more than one asset in a batch.
 - Run `tripo balance` first when the user asks for several assets, and report the
-  cost back after finishing.
+  cost back after finishing. `balance`, `frozen` and `credits_consumed` are decimals
+  (e.g. `48.00`) — parse as float, never as int.
+- Concurrency is pooled per account and per category (exit code 9 when a pool is
+  full; other pools are unaffected): 10 parallel v3.x generations, 5 P-series
+  (P1/P2), 10 animation, 5 texture/convert/refine, 10 mesh ops — and **only 1
+  image generation** (text-to-image, image-to-image, multiview). Never fan out
+  image jobs; run them one after another.
 - For 3D printing and other untextured output, add `-p texture=false -p pbr=false`
   — it skips texture credits entirely.
 - Do not silently re-roll a disappointing result. Show the user the preview and ask.
@@ -204,7 +224,7 @@ clicked. Instead:
 | `tripo redo [@last]`             | same request, new seed               |
 | `tripo files upload <path>`      | get a `file_token` for an image      |
 | `tripo batch run manifest.yaml`  | bulk jobs, resumable                 |
-| `tripo docs --topic <topic>`     | full docs for any command or recipe  |
+| `tripo docs --topic <topic>`     | full docs: `commands/make` `commands/generate` `commands/process` `examples/<scenario>` `common-errors` |
 
 Download URLs returned by the API expire in about five minutes — never cache one.
 Re-run `tripo task get <id> --download` instead.

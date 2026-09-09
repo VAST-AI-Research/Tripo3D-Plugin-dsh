@@ -32,6 +32,20 @@ tripo make "a health potion bottle" --for game-mobile \
   -o ./Assets/Art/Props --json --yes
 ```
 
+Which generation model fits the budget:
+
+- **P1** (`tripo-p1`, 50-20000 faces) — the default low-poly choice; clean, game-style
+  topology out of the box. The CLI picks it automatically for any `face_limit` ≤ 20000
+  or a "low poly" prompt.
+- **P2** (`--model tripo-p2`, 48-50000 tri / 48-25000 quad) — P1 with quads and a
+  bigger budget: `-p quad=true` for subdivision-friendly or hand-edit-friendly low-poly.
+  Costs 100+ credits per generation versus 30-50 for P1; never auto-selected.
+- **v3.1 + `smart_low_poly`** (`--model tripo-v3.1 -p smart_low_poly=true -p face_limit=<500-20000>`)
+  — high-fidelity detail with hand-modelled-style low-poly topology, when P1's look is
+  too simple. Without `--model`, a `face_limit` ≤ 20000 silently switches to P1.
+- **v3.1 + `decimate`** — hero-quality source, then LODs (next section). P1/P2 do not
+  support `smart_low_poly`, `generate_parts` or `geometry_quality`.
+
 ## Props
 
 ```bash
@@ -90,7 +104,8 @@ tripo make "a robot soldier, T-pose" --json --yes \
 - **Unity / Unreal**: FBX via `--then convert:fbx`, or `--for game-mobile` which
   already converts.
 - Quads (`-p quad=true`) force FBX — glTF cannot store them, so `convert:glb`
-  combined with quads is rejected.
+  combined with quads is rejected. Quads are v3.1 or P2 only — on P1 the CLI strips
+  `quad` and suggests `--model tripo-p2`.
 - `texture_size` is set on the convert step, not at generation:
   `--then convert:format=FBX,texture_size=2048`.
 
